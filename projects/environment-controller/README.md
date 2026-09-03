@@ -45,5 +45,5 @@ make run
 
 - The executable runs nominal, cold, hot, high-humidity, sensor-fault, and recovery scenarios.
 - Unit tests assert each hysteresis boundary plus the safe fault state and watchdog servicing.
-- The browser dashboard at the repository root exposes the same thresholds, state transitions, GPIO bits, and fault behavior for a quick live review.
+- The [browser dashboard](https://manna-embedded-firmware.blithe-flint-7051.chatgpt.site) exposes the same thresholds, state transitions, GPIO bits, and fault behavior for a quick live review.
 - [Job-posting research](docs/job-posting-research.md) maps this design to current firmware hiring signals.

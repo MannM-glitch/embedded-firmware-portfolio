@@ -4,7 +4,7 @@ Portfolio projects for embedded and firmware engineering roles. Each project is 
 
 ## Featured Project: Environmental Controller Firmware
 
-[View the firmware source](projects/environment-controller/src) | [Read the architecture](projects/environment-controller/README.md)
+[Open the interactive simulation](https://manna-embedded-firmware.blithe-flint-7051.chatgpt.site) | [View the firmware source](projects/environment-controller/src) | [Read the architecture](projects/environment-controller/README.md)
 
 A safety-aware environmental controller written in C. The project models a periodic control task that reads a sensor over a simulated I2C boundary and drives an 8-bit GPIO output register for a heater, fan, dehumidifier, and fault alarm.
 
