@@ -1,0 +1,290 @@
+.vehicle-workspace,
+.vehicle-evidence {
+  width: min(1440px, calc(100% - 2rem));
+  margin-inline: auto;
+}
+
+.vehicle-workspace {
+  display: grid;
+  grid-template-columns: minmax(255px, 0.8fr) minmax(500px, 1.55fr) minmax(255px, 0.82fr);
+  gap: 1rem;
+  padding-block: 1.25rem;
+}
+
+.vehicle-inputs,
+.vehicle-trace {
+  padding: 1.1rem;
+}
+
+.vehicle-core {
+  min-width: 0;
+  padding: 1.35rem;
+}
+
+.select-control {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 1.2rem;
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.select-control select {
+  min-height: 2.6rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--panel-raised);
+  color: var(--ink);
+  padding-inline: 0.65rem;
+}
+
+.select-control select:focus-visible {
+  outline: 3px solid var(--amber);
+  outline-offset: 3px;
+}
+
+.scenario-list > div {
+  grid-template-columns: 1fr 1fr;
+}
+
+.authority-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+
+.authority-grid > div {
+  display: grid;
+  gap: 0.25rem;
+  min-height: 5.1rem;
+  padding: 0.8rem;
+  border-right: 1px solid var(--line);
+  background: #1d2019;
+}
+
+.authority-grid > div:last-child {
+  border-right: 0;
+}
+
+.authority-grid span,
+.signal-grid span {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.authority-grid strong {
+  color: var(--ink);
+  font-family: "Cascadia Mono", "SFMono-Regular", Consolas, monospace;
+}
+
+.can-block {
+  margin-top: 1.2rem;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #1b1d17;
+}
+
+.command-frame {
+  border-color: #56695d;
+}
+
+.can-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.can-heading code {
+  color: var(--cyan);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.frame-data {
+  display: block;
+  margin-top: 0.85rem;
+  padding: 0.65rem;
+  overflow-x: auto;
+  border-left: 2px solid var(--teal);
+  background: #141611;
+  color: var(--amber);
+  font-size: 0.88rem;
+  white-space: nowrap;
+}
+
+.signal-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.4rem;
+  margin-top: 0.85rem;
+}
+
+.signal-grid span {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.signal-grid strong {
+  color: var(--ink);
+  font-family: "Cascadia Mono", "SFMono-Regular", Consolas, monospace;
+  font-size: 0.86rem;
+}
+
+.vehicle-outputs {
+  margin-top: 1.35rem;
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--line);
+}
+
+.vehicle-output-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.55rem;
+  margin-top: 0.75rem;
+}
+
+.vehicle-output-grid .output-row[data-output="fault"].active {
+  border-color: var(--red);
+}
+
+.vehicle-output-grid .output-row[data-output="fault"].active .output-dot {
+  border-color: var(--red);
+  background: var(--red);
+}
+
+.vehicle-output-grid .output-row[data-output="fault"].active .output-state {
+  color: var(--red);
+}
+
+.state-badge.preconditioning,
+.state-badge.cooling,
+.state-badge.derate {
+  border-color: var(--amber);
+  color: var(--amber);
+}
+
+.state-badge.shutdown,
+.state-badge.timeout {
+  border-color: var(--red);
+  color: var(--red);
+}
+
+.vehicle-trace {
+  display: flex;
+  flex-direction: column;
+}
+
+.vehicle-trace .event-log {
+  min-height: 30rem;
+}
+
+.vehicle-evidence {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-bottom: 1.5rem;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.vehicle-evidence > div {
+  min-height: 9.5rem;
+  padding: 1.15rem;
+  border-right: 1px solid var(--line);
+}
+
+.vehicle-evidence > div:last-child {
+  border-right: 0;
+}
+
+.vehicle-evidence strong {
+  display: block;
+  margin-top: 0.25rem;
+}
+
+.vehicle-evidence p {
+  margin-top: 0.5rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 1080px) {
+  .vehicle-workspace {
+    grid-template-columns: minmax(270px, 0.8fr) minmax(440px, 1.3fr);
+  }
+
+  .vehicle-trace {
+    grid-column: 1 / -1;
+  }
+
+  .vehicle-trace .event-log {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    min-height: 0;
+    max-height: 16rem;
+  }
+}
+
+@media (max-width: 760px) {
+  .vehicle-workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .authority-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .authority-grid > div:nth-child(2) {
+    border-right: 0;
+  }
+
+  .authority-grid > div:nth-child(-n + 2) {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .vehicle-output-grid,
+  .vehicle-evidence,
+  .vehicle-trace .event-log {
+    grid-template-columns: 1fr;
+  }
+
+  .vehicle-evidence > div {
+    min-height: 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .vehicle-evidence > div:last-child {
+    border-bottom: 0;
+  }
+}
+
+@media (max-width: 450px) {
+  .vehicle-workspace,
+  .vehicle-evidence {
+    width: min(100% - 1rem, 1440px);
+  }
+
+  .vehicle-core {
+    padding: 1rem;
+  }
+
+  .signal-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .vehicle-output-grid .output-row {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
+  .vehicle-output-grid .output-row code {
+    grid-column: 2;
+  }
+
+  .vehicle-output-grid .output-state {
+    grid-row: 1 / span 2;
+    grid-column: 3;
+  }
+}

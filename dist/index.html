@@ -3,152 +3,163 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Interactive environmental controller firmware simulation in C.">
-    <title>Environmental Controller | Embedded Firmware Portfolio</title>
+    <meta name="description" content="Interactive CAN and battery thermal ECU firmware simulation in C.">
+    <title>Battery Thermal ECU | Embedded Firmware Portfolio</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="vehicle-thermal.css">
   </head>
   <body>
-    <a class="skip-link" href="#workspace">Skip to simulator</a>
+    <a class="skip-link" href="#workspace">Skip to ECU console</a>
     <header class="topbar">
       <div class="brand">
-        <span class="eyebrow">Embedded firmware portfolio</span>
-        <strong>Environmental Controller</strong>
+        <span class="eyebrow">Automotive firmware portfolio</span>
+        <strong>Battery Thermal ECU</strong>
       </div>
       <nav aria-label="Project links">
-        <a href="https://github.com/MannM-glitch/embedded-firmware-portfolio/tree/master/projects/environment-controller">C source</a>
+        <a href="environmental-controller.html">Environmental controller</a>
+        <a href="https://github.com/MannM-glitch/embedded-firmware-portfolio/tree/master/projects/vehicle-thermal-ecu">C source</a>
         <a href="https://github.com/MannM-glitch/embedded-firmware-portfolio">Repository</a>
       </nav>
     </header>
 
-    <main id="workspace" class="workspace">
-      <section class="control-panel panel" aria-labelledby="controls-title">
+    <main id="workspace" class="vehicle-workspace">
+      <section class="vehicle-inputs panel" aria-labelledby="inputs-title">
         <div class="panel-heading">
-          <span class="section-kicker">Inputs</span>
-          <h1 id="controls-title">Sensor console</h1>
+          <span class="section-kicker">CAN input</span>
+          <h1 id="inputs-title">BMS thermal status</h1>
         </div>
 
-        <label class="range-control" for="temperature">
-          <span>Temperature</span>
-          <output id="temperature-input-value" for="temperature">22.0 C</output>
+        <label class="range-control" for="pack-temperature">
+          <span>Pack temperature</span>
+          <output id="pack-temperature-value" for="pack-temperature">23.0 C</output>
         </label>
-        <input id="temperature" type="range" min="-100" max="450" step="5" value="220">
+        <input id="pack-temperature" type="range" min="-100" max="800" step="5" value="230">
 
-        <label class="range-control" for="humidity">
-          <span>Humidity</span>
-          <output id="humidity-input-value" for="humidity">45.0 %</output>
+        <label class="range-control" for="pack-voltage">
+          <span>Pack voltage</span>
+          <output id="pack-voltage-value" for="pack-voltage">400.0 V</output>
         </label>
-        <input id="humidity" type="range" min="0" max="1000" step="10" value="450">
+        <input id="pack-voltage" type="range" min="2000" max="4500" step="10" value="4000">
 
-        <label class="switch-row" for="sensor-online">
+        <label class="select-control" for="vehicle-mode">
+          <span>Vehicle mode</span>
+          <select id="vehicle-mode">
+            <option value="drive">Drive</option>
+            <option value="charge">Charge</option>
+          </select>
+        </label>
+
+        <label class="switch-row" for="bms-online">
           <span>
-            <strong>Sensor bus</strong>
-            <small>I2C transaction available</small>
+            <strong>BMS CAN node</strong>
+            <small>Receive path available</small>
           </span>
-          <input id="sensor-online" type="checkbox" checked>
+          <input id="bms-online" type="checkbox" checked>
         </label>
 
-        <div class="command-stack" aria-label="Simulation commands">
-          <button id="run-cycle" class="primary" type="button">Run 1-second cycle</button>
-          <button id="run-demo" type="button">Run demo scenario</button>
-          <button id="reset" type="button">Reset controller</button>
+        <div class="command-stack" aria-label="ECU commands">
+          <button id="inject-frame" class="primary" type="button">Inject BMS frame</button>
+          <button id="run-task" type="button">Run 100 ms task</button>
+          <button id="run-campaign" type="button">Run fault campaign</button>
+          <button id="reset-ecu" type="button">Reset ECU</button>
         </div>
 
         <div class="scenario-list" aria-label="Scenario shortcuts">
           <span class="section-kicker">Load condition</span>
           <div>
-            <button type="button" data-scenario="cold">Cold room</button>
-            <button type="button" data-scenario="humid">High humidity</button>
-            <button type="button" data-scenario="hot">Over-temperature</button>
-            <button type="button" data-scenario="fault">Sensor fault</button>
+            <button type="button" data-scenario="cooling">Cooling</button>
+            <button type="button" data-scenario="derate">Power derate</button>
+            <button type="button" data-scenario="critical">Safe shutdown</button>
+            <button type="button" data-scenario="cold-charge">Cold charge</button>
+            <button type="button" data-scenario="timeout">CAN timeout</button>
+            <button type="button" data-scenario="nominal">Nominal drive</button>
           </div>
         </div>
       </section>
 
-      <section class="signal-panel panel" aria-labelledby="simulation-title">
+      <section class="vehicle-core panel" aria-labelledby="ecu-title">
         <div class="panel-heading signal-heading">
           <div>
-            <span class="section-kicker">Periodic control task</span>
-            <h2 id="simulation-title">Live controller state</h2>
+            <span class="section-kicker">100 ms safety task</span>
+            <h2 id="ecu-title">Thermal command authority</h2>
           </div>
-          <span id="state-badge" class="state-badge normal">NORMAL</span>
+          <span id="ecu-state" class="state-badge normal">NORMAL</span>
         </div>
 
-        <div class="measurement-grid" aria-live="polite">
-          <div>
-            <span>Temperature</span>
-            <strong id="temperature-reading">22.0 C</strong>
-          </div>
-          <div>
-            <span>Humidity</span>
-            <strong id="humidity-reading">45.0 %</strong>
-          </div>
-          <div>
-            <span>Sensor read</span>
-            <strong id="sensor-reading">I2C OK</strong>
-          </div>
-          <div>
-            <span>Control cycles</span>
-            <strong id="cycle-reading">0</strong>
-          </div>
+        <div class="authority-grid" aria-live="polite">
+          <div><span>Torque limit</span><strong id="torque-limit">100%</strong></div>
+          <div><span>Charge limit</span><strong id="charge-limit">100%</strong></div>
+          <div><span>BMS freshness</span><strong id="bms-freshness">0 ms</strong></div>
+          <div><span>Task runs</span><strong id="task-runs">0</strong></div>
         </div>
 
-        <section class="register-block" aria-labelledby="register-title">
-          <div class="register-heading">
+        <section class="can-block" aria-labelledby="rx-title">
+          <div class="can-heading">
             <div>
-              <span class="section-kicker">GPIO output register</span>
-              <h3 id="register-title">PORT_OUT</h3>
+              <span class="section-kicker">Receive frame</span>
+              <h3 id="rx-title">BMS_THERMAL_STATUS</h3>
             </div>
-            <code id="register-value">0x00</code>
+            <code>0x18FF50E5</code>
           </div>
-          <div id="bit-register" class="bit-register" aria-label="GPIO output register bits"></div>
-          <code id="binary-value" class="binary-value">0b00000000</code>
+          <code id="rx-data" class="frame-data">E6 00 A0 0F 00 00 00 00</code>
+          <div class="signal-grid">
+            <span>Temp <strong id="decoded-temp">23.0 C</strong></span>
+            <span>Voltage <strong id="decoded-voltage">400.0 V</strong></span>
+            <span>Mode <strong id="decoded-mode">DRIVE</strong></span>
+          </div>
         </section>
 
-        <section class="outputs" aria-labelledby="outputs-title">
-          <div class="outputs-heading">
-            <span class="section-kicker">Actuator outputs</span>
-            <h3 id="outputs-title">Pin states</h3>
+        <section class="can-block command-frame" aria-labelledby="tx-title">
+          <div class="can-heading">
+            <div>
+              <span class="section-kicker">Transmit frame</span>
+              <h3 id="tx-title">THERMAL_COMMAND</h3>
+            </div>
+            <code>0x18FF51E5</code>
           </div>
-          <div class="output-grid">
-            <div class="output-row" data-output="heater"><span class="output-dot"></span><strong>Heater</strong><code>GPIO 0</code><span class="output-state">OFF</span></div>
-            <div class="output-row" data-output="fan"><span class="output-dot"></span><strong>Fan</strong><code>GPIO 1</code><span class="output-state">OFF</span></div>
-            <div class="output-row" data-output="dehumidifier"><span class="output-dot"></span><strong>Dehumidifier</strong><code>GPIO 2</code><span class="output-state">OFF</span></div>
-            <div class="output-row" data-output="alarm"><span class="output-dot"></span><strong>Fault alarm</strong><code>GPIO 7</code><span class="output-state">OFF</span></div>
+          <code id="tx-data" class="frame-data">00 64 64 00 00 00 00 00</code>
+          <div class="signal-grid">
+            <span>Outputs <strong id="output-register">0x00</strong></span>
+            <span>DTC <strong id="dtc-code">NONE</strong></span>
+            <span>Counter <strong id="frame-counter">0</strong></span>
+          </div>
+        </section>
+
+        <section class="vehicle-outputs" aria-labelledby="outputs-title">
+          <div class="outputs-heading">
+            <span class="section-kicker">ECU outputs</span>
+            <h3 id="outputs-title">Commanded actuators</h3>
+          </div>
+          <div id="vehicle-bit-register" class="bit-register" aria-label="ECU command output register"></div>
+          <div class="vehicle-output-grid">
+            <div class="output-row" data-output="pump"><span class="output-dot"></span><strong>Coolant pump</strong><code>GPIO 0</code><span class="output-state">OFF</span></div>
+            <div class="output-row" data-output="fan"><span class="output-dot"></span><strong>Radiator fan</strong><code>GPIO 1</code><span class="output-state">OFF</span></div>
+            <div class="output-row" data-output="heater"><span class="output-dot"></span><strong>Pack heater</strong><code>GPIO 2</code><span class="output-state">OFF</span></div>
+            <div class="output-row" data-output="charge"><span class="output-dot"></span><strong>Charge enable</strong><code>GPIO 3</code><span class="output-state">OFF</span></div>
+            <div class="output-row" data-output="fault"><span class="output-dot"></span><strong>Fault lamp</strong><code>GPIO 7</code><span class="output-state">OFF</span></div>
           </div>
         </section>
       </section>
 
-      <aside class="trace-panel panel" aria-labelledby="trace-title">
+      <aside class="vehicle-trace panel" aria-labelledby="trace-title">
         <div class="panel-heading">
-          <span class="section-kicker">UART telemetry</span>
-          <h2 id="trace-title">Event trace</h2>
+          <span class="section-kicker">Diagnostics</span>
+          <h2 id="trace-title">CAN trace</h2>
         </div>
-        <ol id="event-log" class="event-log" aria-live="polite"></ol>
+        <ol id="vehicle-log" class="event-log" aria-live="polite"></ol>
         <div class="trace-footer">
           <span>Watchdog kicks</span>
-          <strong id="watchdog-reading">0</strong>
+          <strong id="watchdog-kicks">0</strong>
         </div>
       </aside>
     </main>
 
-    <section class="engineering-strip" aria-label="Engineering evidence">
-      <div>
-        <span class="section-kicker">Implementation</span>
-        <strong>C11 control state machine</strong>
-        <p>Application policy is isolated from sensor, GPIO, watchdog, and time access.</p>
-      </div>
-      <div>
-        <span class="section-kicker">Verification</span>
-        <strong>Host-side unit tests and CI</strong>
-        <p>Tests cover thermal and humidity hysteresis, fault handling, recovery, and watchdog servicing.</p>
-      </div>
-      <div>
-        <span class="section-kicker">Hardware port</span>
-        <strong>Replace the platform layer</strong>
-        <p>The simulator boundary maps directly to board-specific I2C, GPIO, UART, and watchdog drivers.</p>
-      </div>
+    <section class="vehicle-evidence" aria-label="Engineering evidence">
+      <div><span class="section-kicker">Safety supervision</span><strong>300 ms BMS timeout</strong><p>Missing status forces zero torque/charge authority and commands pump, fan, and fault lamp.</p></div>
+      <div><span class="section-kicker">Control policy</span><strong>Hysteresis and derating</strong><p>Cooling, power limits, and preconditioning avoid a binary all-or-nothing response.</p></div>
+      <div><span class="section-kicker">Verification</span><strong>C tests and GitHub Actions</strong><p>Native tests assert raw command publication, timeout handling, shutdown, and charge recovery.</p></div>
     </section>
 
-    <script src="app.js"></script>
+    <script src="vehicle-thermal.js"></script>
   </body>
 </html>

@@ -5,10 +5,15 @@ on:
   pull_request:
 
 jobs:
-  controller-tests:
+  firmware-tests:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project:
+          - projects/environment-controller
+          - projects/vehicle-thermal-ecu
     steps:
       - uses: actions/checkout@v4
-      - name: Build and run controller tests
+      - name: Build and run firmware tests
         run: make test
-        working-directory: projects/environment-controller
+        working-directory: ${{ matrix.project }}
