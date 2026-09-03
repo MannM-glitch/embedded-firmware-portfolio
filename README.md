@@ -24,7 +24,7 @@ projects/environment-controller/
   src/          Firmware application and platform-simulation layers
   tests/        Host-side behavioral tests
   docs/         Architecture and job-signal research
-showcase/       Deployed interactive controller dashboard
+dist/           Deployed interactive controller dashboard
 ```
 
 ## Verification
