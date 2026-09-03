@@ -1,0 +1,8 @@
+build/
+*.exe
+*.obj
+*.o
+*.ilk
+*.pdb
+private-learning/
+site-release.tgz

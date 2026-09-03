@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Interactive environmental controller firmware simulation in C.">
+    <title>Environmental Controller | Embedded Firmware Portfolio</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#workspace">Skip to simulator</a>
+    <header class="topbar">
+      <div class="brand">
+        <span class="eyebrow">Embedded firmware portfolio</span>
+        <strong>Environmental Controller</strong>
+      </div>
+      <nav aria-label="Project links">
+        <a href="https://github.com/MannM-glitch/embedded-firmware-portfolio/tree/master/projects/environment-controller">C source</a>
+        <a href="https://github.com/MannM-glitch/embedded-firmware-portfolio">Repository</a>
+      </nav>
+    </header>
+
+    <main id="workspace" class="workspace">
+      <section class="control-panel panel" aria-labelledby="controls-title">
+        <div class="panel-heading">
+          <span class="section-kicker">Inputs</span>
+          <h1 id="controls-title">Sensor console</h1>
+        </div>
+
+        <label class="range-control" for="temperature">
+          <span>Temperature</span>
+          <output id="temperature-input-value" for="temperature">22.0 C</output>
+        </label>
+        <input id="temperature" type="range" min="-100" max="450" step="5" value="220">
+
+        <label class="range-control" for="humidity">
+          <span>Humidity</span>
+          <output id="humidity-input-value" for="humidity">45.0 %</output>
+        </label>
+        <input id="humidity" type="range" min="0" max="1000" step="10" value="450">
+
+        <label class="switch-row" for="sensor-online">
+          <span>
+            <strong>Sensor bus</strong>
+            <small>I2C transaction available</small>
+          </span>
+          <input id="sensor-online" type="checkbox" checked>
+        </label>
+
+        <div class="command-stack" aria-label="Simulation commands">
+          <button id="run-cycle" class="primary" type="button">Run 1-second cycle</button>
+          <button id="run-demo" type="button">Run demo scenario</button>
+          <button id="reset" type="button">Reset controller</button>
+        </div>
+
+        <div class="scenario-list" aria-label="Scenario shortcuts">
+          <span class="section-kicker">Load condition</span>
+          <div>
+            <button type="button" data-scenario="cold">Cold room</button>
+            <button type="button" data-scenario="humid">High humidity</button>
+            <button type="button" data-scenario="hot">Over-temperature</button>
+            <button type="button" data-scenario="fault">Sensor fault</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="signal-panel panel" aria-labelledby="simulation-title">
+        <div class="panel-heading signal-heading">
+          <div>
+            <span class="section-kicker">Periodic control task</span>
+            <h2 id="simulation-title">Live controller state</h2>
+          </div>
+          <span id="state-badge" class="state-badge normal">NORMAL</span>
+        </div>
+
+        <div class="measurement-grid" aria-live="polite">
+          <div>
+            <span>Temperature</span>
+            <strong id="temperature-reading">22.0 C</strong>
+          </div>
+          <div>
+            <span>Humidity</span>
+            <strong id="humidity-reading">45.0 %</strong>
+          </div>
+          <div>
+            <span>Sensor read</span>
+            <strong id="sensor-reading">I2C OK</strong>
+          </div>
+          <div>
+            <span>Control cycles</span>
+            <strong id="cycle-reading">0</strong>
+          </div>
+        </div>
+
+        <section class="register-block" aria-labelledby="register-title">
+          <div class="register-heading">
+            <div>
+              <span class="section-kicker">GPIO output register</span>
+              <h3 id="register-title">PORT_OUT</h3>
+            </div>
+            <code id="register-value">0x00</code>
+          </div>
+          <div id="bit-register" class="bit-register" aria-label="GPIO output register bits"></div>
+          <code id="binary-value" class="binary-value">0b00000000</code>
+        </section>
+
+        <section class="outputs" aria-labelledby="outputs-title">
+          <div class="outputs-heading">
+            <span class="section-kicker">Actuator outputs</span>
+            <h3 id="outputs-title">Pin states</h3>
+          </div>
+          <div class="output-grid">
+            <div class="output-row" data-output="heater"><span class="output-dot"></span><strong>Heater</strong><code>GPIO 0</code><span class="output-state">OFF</span></div>
+            <div class="output-row" data-output="fan"><span class="output-dot"></span><strong>Fan</strong><code>GPIO 1</code><span class="output-state">OFF</span></div>
+            <div class="output-row" data-output="dehumidifier"><span class="output-dot"></span><strong>Dehumidifier</strong><code>GPIO 2</code><span class="output-state">OFF</span></div>
+            <div class="output-row" data-output="alarm"><span class="output-dot"></span><strong>Fault alarm</strong><code>GPIO 7</code><span class="output-state">OFF</span></div>
+          </div>
+        </section>
+      </section>
+
+      <aside class="trace-panel panel" aria-labelledby="trace-title">
+        <div class="panel-heading">
+          <span class="section-kicker">UART telemetry</span>
+          <h2 id="trace-title">Event trace</h2>
+        </div>
+        <ol id="event-log" class="event-log" aria-live="polite"></ol>
+        <div class="trace-footer">
+          <span>Watchdog kicks</span>
+          <strong id="watchdog-reading">0</strong>
+        </div>
+      </aside>
+    </main>
+
+    <section class="engineering-strip" aria-label="Engineering evidence">
+      <div>
+        <span class="section-kicker">Implementation</span>
+        <strong>C11 control state machine</strong>
+        <p>Application policy is isolated from sensor, GPIO, watchdog, and time access.</p>
+      </div>
+      <div>
+        <span class="section-kicker">Verification</span>
+        <strong>Host-side unit tests and CI</strong>
+        <p>Tests cover thermal and humidity hysteresis, fault handling, recovery, and watchdog servicing.</p>
+      </div>
+      <div>
+        <span class="section-kicker">Hardware port</span>
+        <strong>Replace the platform layer</strong>
+        <p>The simulator boundary maps directly to board-specific I2C, GPIO, UART, and watchdog drivers.</p>
+      </div>
+    </section>
+
+    <script src="app.js"></script>
+  </body>
+</html>
